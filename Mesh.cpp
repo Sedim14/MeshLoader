@@ -40,7 +40,7 @@ void Mesh::createFaces(const char* obj)
 
     // Open the .obj file using fopen_s
     if (fopen_s(&file, obj, "r") == 0) {
-        std::cout << "File opened successfully" << std::endl;
+        //std::cout << "File opened successfully" << std::endl;
         char type;
         float v1, v2, v3;
         int result;
@@ -51,7 +51,7 @@ void Mesh::createFaces(const char* obj)
             {
                 std::vector<Vector3D*> face = {&vertices[v1 - 1], &vertices[v2 - 1], &vertices[v3 - 1] }; //Pass the addreses of each vertexs
                 faces.push_back(face);
-                std::cout << "Face composed by vertices: (" << v1 << ", " << v2 << ", " << v3 << ")" << std::endl;
+                //std::cout << "Face composed by vertices: (" << v1 << ", " << v2 << ", " << v3 << ")" << std::endl;
             }
         }
 
@@ -67,15 +67,10 @@ void Mesh::createFaces(const char* obj)
 //Este metodo se dedica unicamente a dibujar los vertices en su posicion actual
 void Mesh::drawMesh(const std::vector<Vector3D>& colors)
 {
-    std::cout<<"AngleX: "<<angleX<<" AngleY: "<<angleY<<std::endl;
-    std::cout << "New frame"<<std::endl;
+    //std::cout<<"AngleX: "<<angleX<<" AngleY: "<<angleY<<std::endl;
+    //std::cout << "New frame"<<std::endl;
     //Actualiza la posicion de los vertices antes de dibujarlos
-    //updateVertices();
-
-     // Apply rotation transformations
-    glRotatef(angleX, 1.0f, 0.0f, 0.0f); // Rotate around the X-axis
-    glRotatef(angleY, 0.0f, 1.0f, 0.0f); // Rotate around the Y-axis
-    glRotatef(angleZ, 0.0f, 0.0f, 1.0f); // Rotate around the Z-axis
+    updateVertices();
 
     glBegin(GL_TRIANGLES);
 
@@ -99,7 +94,7 @@ void Mesh::drawMesh(const std::vector<Vector3D>& colors)
         {
             Vector3D *currentVertex = currentFace[i];
             glVertex3f(currentVertex->getX(), currentVertex->getY(), currentVertex->getZ());
-            std::cout << "Vertex Posicion: (" << currentVertex->getX() << ", " << currentVertex->getY() << ", " << currentVertex->getY() << ")" << std::endl;
+            //std::cout << "Vertex Posicion: (" << currentVertex->getX() << ", " << currentVertex->getY() << ", " << currentVertex->getY() << ")" << std::endl;
         }
 
         iColor++;

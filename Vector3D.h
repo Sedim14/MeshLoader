@@ -2,9 +2,8 @@
 
 class Vector3D
 {
-private:
-	float x, y, z;
 public:
+	float x, y, z;
 	Vector3D(float X, float Y, float Z);
 	Vector3D();
 	float getX(); 

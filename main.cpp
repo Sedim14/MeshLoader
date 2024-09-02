@@ -76,11 +76,6 @@ void init(void)
  */
 int main(int argc, char** argv)
 {
-
-	model.loadVertices("cube.obj");
-	model.createFaces("cube.obj");
-	
-
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 600);
@@ -88,6 +83,10 @@ int main(int argc, char** argv)
 	glutCreateWindow("MeshRenderer");
 
 	init();
+
+	//Load all models
+	model.loadVertices("human.obj");
+	model.createFaces("human.obj");
 
 	glutDisplayFunc(display);
 	glutIdleFunc(display);

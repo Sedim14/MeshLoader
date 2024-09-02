@@ -131,12 +131,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Face.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrixTransformations.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Face.h" />
     <ClInclude Include="matrixTransformations.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Vector3D.h" />
