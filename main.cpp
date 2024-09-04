@@ -27,6 +27,8 @@ std::vector<Vector3D> colorList = {
 };
 
 Mesh model;
+Mesh model2;
+Mesh model3;
 
 
 //Window Height
@@ -80,6 +82,9 @@ void display(void)
 
 
 	model.drawMesh(colorList);
+	model2.drawMesh(colorList);
+	model3.drawMesh(colorList);
+
 
 	glutSwapBuffers();
 	//glFlush();
@@ -128,6 +133,12 @@ int main(int argc, char** argv)
 	//Load all models
 	model.loadVertices("cube.obj");
 	model.createFaces("cube.obj");
+
+	model2.loadVertices("cone.obj");
+	model2.createFaces("cone.obj");
+
+	model3.loadVertices("torus.obj");
+	model3.createFaces("torus.obj");
 
 	
 	glutDisplayFunc(display);
