@@ -70,7 +70,7 @@ void Mesh::drawMesh(const std::vector<Vector3D>& colors)
     //std::cout<<"AngleX: "<<angleX<<" AngleY: "<<angleY<<std::endl;
     //std::cout << "New frame"<<std::endl;
     //Actualiza la posicion de los vertices antes de dibujarlos
-
+   
     glBegin(GL_TRIANGLES);
 
     int iColor = 0;

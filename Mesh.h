@@ -13,9 +13,9 @@ class Mesh
 public:
 	std::vector<Vector3D>vertices;//Vector que representara todos los vertices
 	std::vector<std::vector<Vector3D*>>faces;//Vector vectores donde los vertices de cada cara almacenara las direciones de los vertices
-	float angleX = 0.0;
-	float angleY = 0.0;
-	float angleZ = 0.0;
+	float angleX = 0.0f;
+	float angleY = 0.0f;
+	float angleZ = 0.0f;
 	Mesh() = default; //Constructor
 	~Mesh() = default; //Deconstructor
 	void loadVertices(const char *obj);
