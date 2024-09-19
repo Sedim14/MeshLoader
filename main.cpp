@@ -16,6 +16,8 @@ std::vector<Mesh*>models;
 std::vector<const char*>objs = {
     "cube.obj",
     "cone.obj",
+    "ico.obj",
+    "torus.obj"
 };
 
 
@@ -56,8 +58,8 @@ std::vector<Vector3D> colorList = {
 Mesh model;
 
 //Window Height
-float width = 800.0f;
-float height = 600.0f;
+int width = 800.0f;
+int height = 600.0f;
 float steps = 0.2f;
 
 void loadModels() {
@@ -87,6 +89,9 @@ void drawText(const char* text, int lenght, int x, int y)
     glLoadIdentity();
     glPushMatrix();
     glLoadIdentity();
+
+    glColor3f(0.0f, 1.0f, 1.0f);
+
     glRasterPos2i(x, y);
 
     for (int i = 0; i < lenght; i++)
