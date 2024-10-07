@@ -10,15 +10,8 @@
 #include <thread>
 #include <string>
 #include <sstream>
+#include "matrixTransformations.h"
 
-std::vector<Mesh*>models;
-
-std::vector<const char*>objs = {
-    "cube.obj",
-    "cone.obj",
-    "ico.obj",
-    "torus.obj"
-};
 
 
 GLFWwindow* window;
@@ -28,15 +21,15 @@ int frames = 0;
 
 //Time managers
 float timeAcumulator = 0;
-float timeSlice = 60; //Time elapse between updates
-const int TARGET_FPS = 4000;
+float timeSlice = true; //Time elapse between updates
+const int TARGET_FPS = 10;
 const float TARGET_FRAME_TIME = 1000.0f / TARGET_FPS; // Frame time in milliseconds
 bool canLimitFRameRate = false;
 
 //Camera vectors
-Vector3D up = Vector3D(0.0f, 1.0f, 0.0f);
-Vector3D center = Vector3D(0.0f, 0.0f, 0.0f);
-Vector3D eye = Vector3D(0.0f, 0.0f, 5.0f);
+Vector3D camera = Vector3D(0.0f, 0.0f, 7.0f); //camera
+Vector3D lookAt = Vector3D(0.0f, 0.0f, 0.0f); //lookat
+Vector3D eye = Vector3D(0.0f, 1.0f, 0.0f); //Eye level
 
 // Lista de colores RGB representados como Vector3D
 std::vector<Vector3D> colorList = {
@@ -52,10 +45,12 @@ std::vector<Vector3D> colorList = {
 
 };
 
+std::vector<Mesh*>models;
 
+std::vector<const char*>objs = {
+    "zorua.obj",
+};
 
-
-Mesh model;
 
 //Window Height
 int width = 800.0f;
@@ -72,6 +67,11 @@ void loadModels() {
         models.push_back(newModel);
     }
 
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
 }
 
 
@@ -106,37 +106,48 @@ void drawText(const char* text, int lenght, int x, int y)
 
 
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void cameraControlInput()
 {
+	if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		camera.x += steps;
+	if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		camera.y += steps;
+	if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		camera.z += steps;
+	if(glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
+		camera.x -= steps;
+	if(glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+		camera.y -= steps;
+	if(glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+		camera.z -= steps;
 
-    switch (key)
-    {
-        //H
-    case GLFW_KEY_A: eye.x += steps; break;
-    case GLFW_KEY_S: eye.y += steps; break;
-    case GLFW_KEY_D: eye.z += steps; break;
-    case GLFW_KEY_Z: eye.x -= steps; break;
-    case GLFW_KEY_X: eye.y -= steps; break;
-    case GLFW_KEY_C: eye.z -= steps; break;
-        //Centro = hacia donde ve la camara
-    case GLFW_KEY_H: center.x += steps; break;
-    case GLFW_KEY_J: center.y += steps; break;
-    case GLFW_KEY_K: center.z += steps; break;
-    case GLFW_KEY_B: center.x -= steps; break;
-    case GLFW_KEY_N: center.y -= steps; break;
-    case GLFW_KEY_M: center.z -= steps; break;
+	if(glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
+		lookAt.x += steps;
+	if(glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+		lookAt.y += steps;
+	if(glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+		lookAt.z += steps;
+	if(glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+		lookAt.x -= steps;
+	if(glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
+		lookAt.y -= steps;
+	if(glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+		lookAt.z -= steps;
 
-        //eye
-    case GLFW_KEY_Q: up.x += steps; break;
-    case GLFW_KEY_W: up.y += steps; break;
-    case GLFW_KEY_E: up.z += steps; break;
-    case GLFW_KEY_I: up.x -= steps; break;
-    case GLFW_KEY_O: up.y -= steps; break;
-    case GLFW_KEY_P: up.z -= steps; break;
-
-    }
-
+	if(glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		eye.x += steps;
+	if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		eye.y += steps;
+	if(glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		eye.z += steps;
+	if(glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
+		eye.x -= steps;
+	if(glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+		eye.y -= steps;
+	if(glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+		eye.z -= steps;
 }
+
 
 
 float getCurrentTimeMS()
@@ -162,7 +173,8 @@ void display(void)
 
     // set camera view
     glLoadIdentity();
-    gluLookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, up.x, up.y, up.z);
+
+    gluLookAt(camera.x, camera.y, camera.z, lookAt.x, lookAt.y, lookAt.z, eye.x, eye.y, eye.z);
 
     for (int i = 0; i < objs.size(); i++) {
         //glPushMatrix();
@@ -224,6 +236,8 @@ void gameLoop()
 
         // Time accumulation for fixed timestep
         timeAcumulator += deltaTime;
+
+        cameraControlInput();
 
 
         while (timeAcumulator > timeSlice)
@@ -303,7 +317,8 @@ int main(int argc, char** argv)
     glfwInit();
     window = glfwCreateWindow(width, height, "meshRenderer", NULL, NULL);
     glfwMakeContextCurrent(window);
-    glfwSetKeyCallback(window, key_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    //glfwSetKeyCallback(window, key_callback);
 
 
     loadModels();
@@ -314,7 +329,7 @@ int main(int argc, char** argv)
     //glutKeyboardFunc(handleKeypress);
 
     //glutMainLoop();
-    glfwSetKeyCallback(window, key_callback);
+    //glfwSetKeyCallback(window, key_callback);
     init();
 
     gameLoop();
